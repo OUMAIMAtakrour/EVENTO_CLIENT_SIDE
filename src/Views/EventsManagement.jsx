@@ -16,7 +16,7 @@ import {
 import { Link, useLocation } from "react-router-dom";
 
 const FuturisticSidebar = ({ isSidebarOpen }) => {
-  const location = useLocation(); 
+  const location = useLocation();
   const menuItems = [
     { icon: Home, label: "Dashboard", tab: "/org" },
     { icon: Calendar, label: "Events", tab: "/event" },
@@ -31,7 +31,6 @@ const FuturisticSidebar = ({ isSidebarOpen }) => {
         border-r border-gray-700 z-40 transition-all duration-300 
         ${isSidebarOpen ? "w-64" : "w-25"} flex flex-col justify-between`}
     >
-     
       <div className="flex items-center p-6 border-b border-gray-700">
         <Zap className="text-blue-400 mr-3" size={28} />
         {isSidebarOpen && (
@@ -41,7 +40,6 @@ const FuturisticSidebar = ({ isSidebarOpen }) => {
         )}
       </div>
 
-     
       <nav className="flex-grow p-4 space-y-2">
         {menuItems.map((item) => (
           <Link
@@ -66,7 +64,6 @@ const FuturisticSidebar = ({ isSidebarOpen }) => {
         ))}
       </nav>
 
-    
       <div className="p-4 border-t border-gray-700">
         {isSidebarOpen ? (
           <div className="flex items-center">
@@ -108,7 +105,6 @@ const EventManagement = () => {
   const [currentEvent, setCurrentEvent] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  
   useEffect(() => {
     const generateStars = () => {
       const starsContainer = document.getElementById("stars-background");
@@ -163,7 +159,6 @@ const EventManagement = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white relative overflow-hidden">
-     
       <div
         id="stars-background"
         className="absolute inset-0 z-0 opacity-30"
@@ -174,14 +169,12 @@ const EventManagement = () => {
         }}
       />
 
-    
       <FuturisticSidebar
         activeTab="events"
         setActiveTab={() => {}}
         isSidebarOpen={isSidebarOpen}
       />
 
-     
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         className="fixed top-4 left-4 z-50 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700 transition"
@@ -193,7 +186,6 @@ const EventManagement = () => {
         {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
-     
       <div
         className="relative z-10 p-6 transition-all duration-300"
         style={{
@@ -258,71 +250,63 @@ const EventManagement = () => {
             ))}
           </div>
 
-        
           {isModalOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-gray-800 bg-opacity-80 backdrop-blur-lg rounded-2xl w-full max-w-lg p-8 relative border border-gray-700">
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="absolute top-4 right-4 text-gray-400 hover:text-white"
-                >
-                  <X size={24} />
-                </button>
-                <h2 className="text-2xl text-white mb-6">
-                  {currentEvent.id ? "Edit Event" : "Add New Event"}
-                </h2>
-
-                <div className="space-y-4">
+            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+              <div className="bg-gray-800 p-8 rounded-xl shadow-lg w-96">
+                <h3 className="text-2xl text-white mb-6">
+                  {currentEvent?.id ? "Edit Event" : "Add Event"}
+                </h3>
+                <div>
+                  <label className="text-sm text-gray-300">Event Title</label>
                   <input
                     type="text"
-                    placeholder="Event Title"
-                    value={currentEvent.title}
+                    className="w-full p-2 mt-2 bg-gray-700 text-white rounded-md"
+                    value={currentEvent?.title || ""}
                     onChange={(e) =>
                       setCurrentEvent({
                         ...currentEvent,
                         title: e.target.value,
                       })
                     }
-                    className="w-full bg-gray-700 bg-opacity-50 text-white p-3 rounded-lg border border-gray-600"
                   />
+                </div>
+                <div className="mt-4">
+                  <label className="text-sm text-gray-300">Location</label>
                   <input
                     type="text"
-                    placeholder="Location"
-                    value={currentEvent.location}
+                    className="w-full p-2 mt-2 bg-gray-700 text-white rounded-md"
+                    value={currentEvent?.location || ""}
                     onChange={(e) =>
                       setCurrentEvent({
                         ...currentEvent,
                         location: e.target.value,
                       })
                     }
-                    className="w-full bg-gray-700 bg-opacity-50 text-white p-3 rounded-lg border border-gray-600"
                   />
+                </div>
+                <div className="mt-4">
+                  <label className="text-sm text-gray-300">Date</label>
                   <input
                     type="date"
-                    value={currentEvent.date}
+                    className="w-full p-2 mt-2 bg-gray-700 text-white rounded-md"
+                    value={currentEvent?.date || ""}
                     onChange={(e) =>
                       setCurrentEvent({ ...currentEvent, date: e.target.value })
                     }
-                    className="w-full bg-gray-700 bg-opacity-50 text-white p-3 rounded-lg border border-gray-600"
                   />
-                  <input
-                    type="text"
-                    placeholder="Image URL"
-                    value={currentEvent.image}
-                    onChange={(e) =>
-                      setCurrentEvent({
-                        ...currentEvent,
-                        image: e.target.value,
-                      })
-                    }
-                    className="w-full bg-gray-700 bg-opacity-50 text-white p-3 rounded-lg border border-gray-600"
-                  />
-
+                </div>
+                <div className="mt-6 flex justify-end">
                   <button
                     onClick={handleSaveEvent}
-                    className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition"
+                    className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
                   >
-                    Save Event
+                    Save
+                  </button>
+                  <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="ml-4 bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition"
+                  >
+                    Cancel
                   </button>
                 </div>
               </div>
@@ -330,29 +314,6 @@ const EventManagement = () => {
           )}
         </div>
       </div>
-
-     
-      <style jsx>{`
-        .star {
-          position: absolute;
-          background-color: white;
-          width: 2px;
-          height: 2px;
-          border-radius: 50%;
-          opacity: 0.7;
-          animation: twinkle 3s infinite;
-        }
-
-        @keyframes twinkle {
-          0%,
-          100% {
-            opacity: 0;
-          }
-          50% {
-            opacity: 1;
-          }
-        }
-      `}</style>
     </div>
   );
 };

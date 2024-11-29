@@ -1,40 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  LogIn, 
-  UserPlus, 
-  Mail, 
-  Lock, 
-  Eye, 
-  EyeOff 
-} from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login, signup } from "../Slices/AuthSlice";
+import { useNavigate } from "react-router-dom";
+import { LogIn, UserPlus, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { toast } from "react-toastify";
 
 const AuthPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, error, userInfo } = useSelector((state) => state.auth);
+
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
 
   useEffect(() => {
-    const generateStars = () => {
-      const starsContainer = document.getElementById("stars-background");
-      if (starsContainer) {
-        starsContainer.innerHTML = "";
-        for (let i = 0; i < 100; i++) {
-          const star = document.createElement("div");
-          star.classList.add("star");
-          star.style.left = `${Math.random() * 100}%`;
-          star.style.top = `${Math.random() * 100}%`;
-          star.style.animationDelay = `${Math.random() * 5}s`;
-          starsContainer.appendChild(star);
-        }
-      }
-    };
-
-    generateStars();
-  }, []);
+    if (userInfo) {
+      navigate("/org");
+    }
+  }, [userInfo, navigate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -46,16 +35,27 @@ const AuthPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (isLogin) {
-     
-      console.log("Login", formData);
+      dispatch(
+        login({
+          email: formData.email,
+          password: formData.password,
+        })
+      );
     } else {
-    
       if (formData.password !== formData.confirmPassword) {
-        alert("Passwords do not match");
+        toast.error("Passwords do not match");
         return;
       }
-      console.log("Signup", formData);
+
+      dispatch(
+        signup({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        })
+      );
     }
   };
 
@@ -97,8 +97,24 @@ const AuthPage = () => {
           </button>
         </div>
 
+        {error && <div className="text-red-500 text-center mb-4">{error}</div>}
+
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
+            {!isLogin && (
+              <div className="relative">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Full Name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full bg-gray-700 bg-opacity-50 text-white p-3 rounded-lg border border-gray-600"
+                />
+              </div>
+            )}
+
             <div className="relative">
               <Mail
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -158,9 +174,14 @@ const AuthPage = () => {
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition"
+              disabled={loading}
+              className={`w-full text-white p-3 rounded-lg transition ${
+                loading
+                  ? "bg-blue-400 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700"
+              }`}
             >
-              {isLogin ? "Login" : "Create Account"}
+              {loading ? "Processing..." : isLogin ? "Login" : "Create Account"}
             </button>
           </div>
         </form>

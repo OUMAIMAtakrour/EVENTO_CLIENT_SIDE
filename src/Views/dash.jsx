@@ -103,7 +103,6 @@ const mockAnalyticsData = {
   growthRate: 22.5,
 };
 
-// New Components
 const EventCard = ({ event }) => (
   <div className="bg-gray-800 rounded-lg p-4 mb-4 flex justify-between items-center">
     <div>
