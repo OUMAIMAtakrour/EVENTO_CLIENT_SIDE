@@ -11,12 +11,9 @@ import {
   Plus,
   Edit,
   Trash2,
-  User as UserIcon,
-  Mail,
-  Phone,
+  MapPin,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-
 
 const FuturisticSidebar = ({ isSidebarOpen }) => {
   const location = useLocation(); 
@@ -95,31 +92,23 @@ const FuturisticSidebar = ({ isSidebarOpen }) => {
   );
 };
 
-const TeamManagement = () => {
-  const [teamMembers, setTeamMembers] = useState([
+const EventManagement = () => {
+  const [events, setEvents] = useState([
     {
       id: 1,
-      name: "John Doe",
-      role: "Project Manager",
-      email: "john.doe@techsports.com",
-      phone: "+1 (555) 123-4567",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=john",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      role: "Lead Developer",
-      email: "jane.smith@techsports.com",
-      phone: "+1 (555) 987-6543",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=jane",
+      title: "Tech Conference 2024",
+      location: "San Francisco, CA",
+      date: "2024-08-15",
+      image: "https://api.dicebear.com/7.x/shapes/svg?seed=conference",
+      members: [],
     },
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentMember, setCurrentMember] = useState(null);
+  const [currentEvent, setCurrentEvent] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
- 
+  
   useEffect(() => {
     const generateStars = () => {
       const starsContainer = document.getElementById("stars-background");
@@ -139,38 +128,35 @@ const TeamManagement = () => {
     generateStars();
   }, []);
 
-  const handleAddMember = () => {
-    setCurrentMember({
-      name: "",
-      role: "",
-      email: "",
-      phone: "",
-      avatar: "",
+  const handleAddEvent = () => {
+    setCurrentEvent({
+      title: "",
+      location: "",
+      date: "",
+      image: "",
+      members: [],
     });
     setIsModalOpen(true);
   };
 
-  const handleEditMember = (member) => {
-    setCurrentMember(member);
+  const handleEditEvent = (event) => {
+    setCurrentEvent(event);
     setIsModalOpen(true);
   };
 
-  const handleDeleteMember = (id) => {
-    setTeamMembers(teamMembers.filter((member) => member.id !== id));
+  const handleDeleteEvent = (id) => {
+    setEvents(events.filter((event) => event.id !== id));
   };
 
-  const handleSaveMember = () => {
-    if (currentMember.id) {
-      setTeamMembers(
-        teamMembers.map((member) =>
-          member.id === currentMember.id ? currentMember : member
+  const handleSaveEvent = () => {
+    if (currentEvent.id) {
+      setEvents(
+        events.map((event) =>
+          event.id === currentEvent.id ? currentEvent : event
         )
       );
     } else {
-      setTeamMembers([
-        ...teamMembers,
-        { ...currentMember, id: teamMembers.length + 1 },
-      ]);
+      setEvents([...events, { ...currentEvent, id: events.length + 1 }]);
     }
     setIsModalOpen(false);
   };
@@ -188,14 +174,14 @@ const TeamManagement = () => {
         }}
       />
 
-   
+    
       <FuturisticSidebar
-        activeTab="team"
+        activeTab="events"
         setActiveTab={() => {}}
         isSidebarOpen={isSidebarOpen}
       />
 
-      
+     
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         className="fixed top-4 left-4 z-50 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700 transition"
@@ -218,51 +204,50 @@ const TeamManagement = () => {
         <div className="space-y-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl text-white flex items-center font-extralight tracking-wide">
-              <Users className="mr-2 text-blue-400" size={28} />
-              Team Management
+              <Calendar className="mr-2 text-blue-400" size={28} />
+              Event Management
             </h2>
             <button
-              onClick={handleAddMember}
+              onClick={handleAddEvent}
               className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center hover:bg-blue-700 transition"
             >
-              <Plus size={20} className="mr-2" /> Add Member
+              <Plus size={20} className="mr-2" /> Add Event
             </button>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {teamMembers.map((member) => (
+            {events.map((event) => (
               <div
-                key={member.id}
+                key={event.id}
                 className="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-2xl overflow-hidden border border-gray-700 shadow-lg"
               >
-                <div className="p-5 flex flex-col items-center">
-                  <img
-                    src={
-                      member.avatar ||
-                      "https://api.dicebear.com/7.x/avataaars/svg?seed=default"
-                    }
-                    alt={member.name}
-                    className="w-24 h-24 rounded-full mb-4 object-cover border-4 border-gray-700"
-                  />
-                  <h3 className="text-xl text-white mb-2">{member.name}</h3>
-                  <p className="text-gray-400 mb-4">{member.role}</p>
+                <img
+                  src={
+                    event.image ||
+                    "https://api.dicebear.com/7.x/shapes/svg?seed=default"
+                  }
+                  alt={event.title}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-5">
+                  <h3 className="text-xl text-white mb-2">{event.title}</h3>
                   <div className="flex items-center text-gray-400 mb-2">
-                    <Mail size={16} className="mr-2" />
-                    {member.email}
+                    <MapPin size={16} className="mr-2" />
+                    {event.location}
                   </div>
                   <div className="flex items-center text-gray-400 mb-4">
-                    <Phone size={16} className="mr-2" />
-                    {member.phone}
+                    <Calendar size={16} className="mr-2" />
+                    {event.date}
                   </div>
-                  <div className="flex justify-between w-full">
+                  <div className="flex justify-between">
                     <button
-                      onClick={() => handleEditMember(member)}
+                      onClick={() => handleEditEvent(event)}
                       className="text-blue-400 hover:text-blue-300 flex items-center"
                     >
                       <Edit size={16} className="mr-2" /> Edit
                     </button>
                     <button
-                      onClick={() => handleDeleteMember(member.id)}
+                      onClick={() => handleDeleteEvent(event.id)}
                       className="text-red-400 hover:text-red-300 flex items-center"
                     >
                       <Trash2 size={16} className="mr-2" /> Delete
@@ -284,76 +269,60 @@ const TeamManagement = () => {
                   <X size={24} />
                 </button>
                 <h2 className="text-2xl text-white mb-6">
-                  {currentMember.id ? "Edit Member" : "Add New Member"}
+                  {currentEvent.id ? "Edit Event" : "Add New Event"}
                 </h2>
 
                 <div className="space-y-4">
                   <input
                     type="text"
-                    placeholder="Full Name"
-                    value={currentMember.name}
+                    placeholder="Event Title"
+                    value={currentEvent.title}
                     onChange={(e) =>
-                      setCurrentMember({
-                        ...currentMember,
-                        name: e.target.value,
+                      setCurrentEvent({
+                        ...currentEvent,
+                        title: e.target.value,
                       })
                     }
                     className="w-full bg-gray-700 bg-opacity-50 text-white p-3 rounded-lg border border-gray-600"
                   />
                   <input
                     type="text"
-                    placeholder="Role"
-                    value={currentMember.role}
+                    placeholder="Location"
+                    value={currentEvent.location}
                     onChange={(e) =>
-                      setCurrentMember({
-                        ...currentMember,
-                        role: e.target.value,
+                      setCurrentEvent({
+                        ...currentEvent,
+                        location: e.target.value,
                       })
                     }
                     className="w-full bg-gray-700 bg-opacity-50 text-white p-3 rounded-lg border border-gray-600"
                   />
                   <input
-                    type="email"
-                    placeholder="Email"
-                    value={currentMember.email}
+                    type="date"
+                    value={currentEvent.date}
                     onChange={(e) =>
-                      setCurrentMember({
-                        ...currentMember,
-                        email: e.target.value,
-                      })
-                    }
-                    className="w-full bg-gray-700 bg-opacity-50 text-white p-3 rounded-lg border border-gray-600"
-                  />
-                  <input
-                    type="tel"
-                    placeholder="Phone Number"
-                    value={currentMember.phone}
-                    onChange={(e) =>
-                      setCurrentMember({
-                        ...currentMember,
-                        phone: e.target.value,
-                      })
+                      setCurrentEvent({ ...currentEvent, date: e.target.value })
                     }
                     className="w-full bg-gray-700 bg-opacity-50 text-white p-3 rounded-lg border border-gray-600"
                   />
                   <input
                     type="text"
-                    placeholder="Avatar URL"
-                    value={currentMember.avatar}
+                    placeholder="Image URL"
+                    value={currentEvent.image}
                     onChange={(e) =>
-                      setCurrentMember({
-                        ...currentMember,
-                        avatar: e.target.value,
+                      setCurrentEvent({
+                        ...currentEvent,
+                        image: e.target.value,
                       })
                     }
                     className="w-full bg-gray-700 bg-opacity-50 text-white p-3 rounded-lg border border-gray-600"
                   />
 
                   <button
-                    onClick={handleSaveMember}
+                    onClick={handleSaveEvent}
                     className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition"
                   >
-                    Save Member
+                    Save Event
                   </button>
                 </div>
               </div>
@@ -362,7 +331,7 @@ const TeamManagement = () => {
         </div>
       </div>
 
-   
+     
       <style jsx>{`
         .star {
           position: absolute;
@@ -388,4 +357,4 @@ const TeamManagement = () => {
   );
 };
 
-export default TeamManagement;
+export default EventManagement;

@@ -1,19 +1,19 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./App.css";
-import Dashboard from "./Views/dashboard";
-import Home from "./Views/home";
-import OrganizerOverview from "./Views/OrganizerDashboard";
 import Dash from "./Views/dash";
+import EventManagement from "./Views/EventsManagement";
+import TeamManagement from "./Components/usreTable";
+import AuthPage from "./Views/Auth";
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/org" element={<Dash />} />
-        {/* <Route path="/users" element={<Users />} />
-        <Route path="/events" element={<Events />} />
+        <Route path="/event" element={<EventManagement />} />
+        <Route path="/users" element={<TeamManagement />} />
+        <Route path="/auth" element={<AuthPage />} />
+        {/* <Route path="/events" element={<Events />} />
         <Route path="*" element={<NotFound />} /> */}
       </Routes>
     </Router>
