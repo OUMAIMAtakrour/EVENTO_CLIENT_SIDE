@@ -1,5 +1,19 @@
-const FuturisticSidebar = ({ isSidebarOpen }) => {
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import {
+  Home,
+  Calendar,
+  Users,
+  Settings,
+  Activity,
+  Zap,
+  LogOut,
+} from "lucide-react";
+import { logout } from "../helpers/axios";
+
+const SideBar = ({ isSidebarOpen }) => {
   const location = useLocation();
+
   const menuItems = [
     { icon: Home, label: "Dashboard", tab: "/org" },
     { icon: Calendar, label: "Events", tab: "/event" },
@@ -7,6 +21,10 @@ const FuturisticSidebar = ({ isSidebarOpen }) => {
     { icon: Activity, label: "Analytics", tab: "/analytics" },
     { icon: Settings, label: "Settings", tab: "/settings" },
   ];
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <div
@@ -49,26 +67,45 @@ const FuturisticSidebar = ({ isSidebarOpen }) => {
 
       <div className="p-4 border-t border-gray-700">
         {isSidebarOpen ? (
-          <div className="flex items-center">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <img
+                src="https://api.dicebear.com/7.x/avataaars/svg?seed=admin"
+                alt="Admin"
+                className="w-10 h-10 rounded-full mr-3 border-2 border-gray-700"
+              />
+              <div>
+                <p className="text-sm text-white">Admin User</p>
+                <p className="text-xs text-gray-400">Organizer</p>
+              </div>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="flex items-center text-gray-400 hover:text-red-500 transition-all"
+            >
+              <LogOut size={18} className="mr-2" />
+              Logout
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center">
             <img
               src="https://api.dicebear.com/7.x/avataaars/svg?seed=admin"
               alt="Admin"
-              className="w-10 h-10 rounded-full mr-3 border-2 border-gray-700"
+              className="w-10 h-10 rounded-full mx-auto border-2 border-gray-700 mb-2"
             />
-            <div>
-              <p className="text-sm text-white">Admin User</p>
-              <p className="text-xs text-gray-400">Organizer</p>
-            </div>
+            <button
+              onClick={handleLogout}
+              className="text-gray-400 hover:text-red-500 transition-all text-sm"
+            >
+              <LogOut size={18} className="mb-1" />
+              Logout
+            </button>
           </div>
-        ) : (
-          <img
-            src="https://api.dicebear.com/7.x/avataaars/svg?seed=admin"
-            alt="Admin"
-            className="w-10 h-10 rounded-full mx-auto border-2 border-gray-700"
-          />
         )}
       </div>
     </div>
   );
 };
-export default FuturisticSidebar;
+
+export default SideBar;

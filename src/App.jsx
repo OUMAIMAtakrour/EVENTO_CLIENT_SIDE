@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Dash from "./Views/dash";
 import EventManagement from "./Views/EventsManagement";
-import TeamManagement from "./Components/usreTable";
+import TeamManagement from "./Views/UserManagement";
 import AuthPage from "./Views/Auth";
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
         <Route path="/org" element={<Dash />} />
         <Route path="/event" element={<EventManagement />} />
         <Route path="/users" element={<TeamManagement />} />
-        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/" element={<AuthPage />} />
         {/* <Route path="/events" element={<Events />} />
         <Route path="*" element={<NotFound />} /> */}
       </Routes>

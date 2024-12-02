@@ -1,14 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosClient from "../helpers/axios";
 
+
 export const login = createAsyncThunk(
-  "auth/login",
-  async (data, { rejectWithValue }) => {
+  'auth/login',
+  async (credentials, { rejectWithValue }) => {
     try {
-      const response = await axiosClient.post("auth/login", data);
+      const response = await axiosClient.post('auth/login', credentials);
+      const token = response.data.access_token;
+      localStorage.setItem("access_token", token);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );

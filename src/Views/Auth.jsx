@@ -19,11 +19,11 @@ const AuthPage = () => {
     confirmPassword: "",
   });
 
-  useEffect(() => {
-    if (userInfo) {
-      navigate("/org");
-    }
-  }, [userInfo, navigate]);
+ useEffect(() => {
+   if (userInfo) {
+     navigate("/org");
+   }
+ }, [userInfo, navigate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
